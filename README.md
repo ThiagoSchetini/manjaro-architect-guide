@@ -30,15 +30,15 @@ Mount UEFI partition:
 	sda1 (or nvme01)
 	mountpoint on /boot (for systemd-boot)
 
-##### [8] Installer Mirrorlist 
+#### [8] Installer Mirrorlist 
 
 Choose: Rank Mirrors by speed
 
-##### [9] Refresh Pacman Keys
+#### [9] Refresh Pacman Keys
 	
 Run it (good idea).
 
-##### [10] Pacman cache
+#### [10] Pacman cache
 
 Choose Yes (save some time on installation).
 
