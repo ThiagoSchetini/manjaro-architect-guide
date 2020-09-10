@@ -183,6 +183,8 @@ Add the private key to the agent (put your passphrase and you can log on server 
 
 	ssh-add ~/.ssh/id_ed25519
 
+#### Firewall
+
 Go to menu and find *Firewall Configuration* app:
 		
 	profile=Office
