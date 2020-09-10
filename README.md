@@ -654,17 +654,16 @@ On terminal:
 		
 #### Settings:
 
-**Wifi**: config your wireless and them, if using desktop cable, disable it.
+Wifi: config your wireless and them, if using desktop cable, disable it.
 
-**Sound**: check your output and your microphone
+Sound: check your output and your microphone
 
-**Power**: Blank Screen=Never / Automatic Suspend=Off / Power Button Action = Power Off
+Power: Blank Screen=Never / Automatic Suspend=Off / Power Button Action = Power Off
 
-**Displays/Night Light**: manual set 17h00 to 8h00
+Displays/Night Light: manual set 17h00 to 8h00
 
-**Mouse & Touchpad/Mouse**: enable natural scrolling
+Mouse & Touchpad/Mouse: enable natural scrolling
 		
-
 Now, reboot your system.
 		
 ### Stress tests
