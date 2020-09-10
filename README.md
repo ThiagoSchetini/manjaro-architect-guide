@@ -1,6 +1,8 @@
 # Manjaro Architect Guide 
 
-A installation guide focused on performance and security with some additional packages for developers, specialy for data engineers.
+A installation guide of Archlinux Manjaro distro using the Manjaro Architect Advanced tool!
+
+This guide is focused on performance and security with some additional packages for developers, specialy for data engineers.
 
 Requires some hardware background and basic shell commands knowledge.
 	
