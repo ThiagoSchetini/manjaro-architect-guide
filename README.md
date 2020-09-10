@@ -288,6 +288,12 @@ Test activity on your git, and check if everything is ok, example:
 	sudo systemctl enable docker 
 	sudo docker run hello-world 
 
+If you have nvidia GPU:
+
+	pacaur -S nvidia-container-runtime
+	reboot system
+	docker run -it --rm --gpus all ubuntu nvidia-smi
+
 #### JVM
 
 	sudo pacman -S jre8-openjdk
