@@ -227,6 +227,7 @@ Go to menu and find *Firewall Configuration* app:
 	sudo pacman -S lrzip (more powerfull, read the man)
 	sudo pacman -S etcher (ISO's pen drive burner)
 	sudo pacman -S transmission-gtk (torrents)
+	pacaur -S debtap (convert .deb packages to pacman in some situations that it do not exists on AUR)
 
 #### Office
 
@@ -676,8 +677,7 @@ Now, reboot your system.
 
 Let's do a basic stress and stability test. Observe for some minutes the cpu and gpu temps:
 
-	CPU should not be Higher than +- 80C
-	GPU should not be Higher than +- 93C
+	CPU and GPU should not be Higher than 90C
 
 Open psensor and use it to monitor:
 
@@ -688,6 +688,11 @@ Start it and observe temperatures and stability during some minutes:
 	glxgears_pixmap
 			
 *hint: open some another app like a internet tab during the test to feel the response of your's processors.*
+
+Memory test. Use the amount of RAM you have on your machine in megabyte (24GB example below) and the second arg is the number of passes that you should:
+
+	sudo pacman -S memtester
+	memtester 23420 3
 			
 More advanced stress test for linux (free) https://benchmark.unigine.com/superposition:
 
