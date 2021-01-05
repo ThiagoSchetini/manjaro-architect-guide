@@ -12,11 +12,11 @@ Create your Architect pen driver installer: https://manjaro.org/downloads/offici
 	
 Use UEFI only (on your BIOS), boot the pen drive and start:
 
-#### [3] Partition Disk
+#### [?] Partition Disk
 
 Choose Automatic partitioning on your sda (it creates the boot + root parts) or use *parted* on manual mode if you have knowledge. Automatic is enough and perfect!
 
-#### [7] Mount Partitions
+#### [?] Mount Partitions
 
 Mount root partition: 
 
@@ -30,15 +30,15 @@ Mount UEFI partition:
 	sda1 (or nvme01)
 	mountpoint on /boot (for systemd-boot)
 
-#### [8] Installer Mirrorlist 
+#### [?] Installer Mirrorlist 
 
 Choose: Rank Mirrors by speed
 
-#### [9] Refresh Pacman Keys
+#### [?] Refresh Pacman Keys
 	
 Run it (good idea).
 
-#### [10] Pacman cache
+#### [?] Pacman cache
 
 Choose Yes (save some time on installation).
 
@@ -48,7 +48,7 @@ Choose Yes (save some time on installation).
 
 Choose:
 
-	linux58 (choose the last stable release!, it's an example)
+	kernel version
 	GNOME interface (this guide is for GNOME)  
 	additional package to installation: NO 
 	Full or Minimal?: minimal
@@ -70,21 +70,19 @@ Kernel (additional driver may appear, know your hardware):
 
 	KERNEL-headers (good idea)
 	KERNEL-acpi_call (use calls: https://github.com/mkottman/acpi_call)
-	KERNEL-r8168 (!only if you have Realtek PCIe Ethernet)
-	KERNEL-tp_smapi (!only for thinkpad notebooks)
-	... etc ...
+	... more ...
+	KERNEL-r8168 (example if you have Realtek PCIe Ethernet)
+	KERNEL-tp_smapi (example for thinkpad notebooks)
+	... etc ....
 
 #### [2] Install Bootloader
 
-Choose systemd. It's newer than the old grub, follows a new specification that make it simple to config and will better support dual boot.
-
-You can check more information about this incredible code on https://systemd.io
-		
 Choose:
 
 	systemd-boot
-	set bootloader as default: Yes
 
+	It's newer than the old grub, follows a new specification that make it simple to config and will better support dual boot. Check more info on https://systemd.io
+		
 #### [3] Configure Base
 
 Generate FSTAB (file): 
@@ -102,7 +100,7 @@ Set System Locale:
 
 Set Timezone and Clock: 
 
-	America/Sao_Paulo, then choose UTC
+	choose region (example America/Sao_Paulo), then choose UTC
 		
 Set Root Password.
 
@@ -120,7 +118,7 @@ Reboot your system.
 	
 #### Time
 
-Hardware should be always on UTC (do not change your BIOS clock).
+Hardware should be always on UTC (do not change your BIOS clock manually).
 
 Check your timezone on Settings.
 
@@ -138,7 +136,7 @@ Calibrate system time:
 
 	sudo ntpd -qg
 		
-For dual boot windows needs to be adjusted to UTC:
+For dual boot your Windows OS needs to be adjusted to UTC:
 
 	https://wiki.archlinux.org/index.php/System_time#Set_hardware_clock_from_system_clock
 		
@@ -191,18 +189,26 @@ Go to menu and find *Firewall Configuration* app:
 	status=on
 	incoming=deny
 	outgoing=allow
+	
+#### Vim
+
+	sudo pacman -S vim
+	sudo vim /etc/environment (edit: "EDITOR=/usr/bin/vim")	
+	vim .profile (edit: "export EDITOR=/usr/bin/vim")
+	reboot
 
 ### Remove Junk
 
 	sudo pacman -Rs manjaro-hello manjaro-application-utility
-	sudo pacman -Rs pamac-gtk pamac-gnome-integration
+	sudo pacman -Rs pamac-gtk pamac-gnome-integration gnome-layout-switcher
 	sudo pacman -Rs yay 
 	sudo pacman -Rs nano
-	sudo pacman -Rs vi
+	sudo pacman -Rs vi (ensure you installed the vim part, because pacaur will need it)
+	sudo pacman -Rs epiphany
 	
 ### Packages
 
-#### Probably pre-installed by architect, check it:
+#### Utils (probably some are pre-installed):
 
 	sudo pacman -S curl
 	sudo pacman -S grep
@@ -211,9 +217,6 @@ Go to menu and find *Firewall Configuration* app:
 	sudo pacman -S mhwd 		
 	sudo pacman -S fuse-exfat 
 	sudo pacman -S archlinux-keyring
-
-#### Utils
-
 	sudo pacman -S mesa-demos (GPU monitoring and test > www.mesa3d.org)
 	sudo pacman -S tlpui (usefull visual interface for tlp)
 	sudo pacman -S pacaur (AUR package manager, BE CAREFULL, read the instructions)
@@ -222,12 +225,10 @@ Go to menu and find *Firewall Configuration* app:
 	sudo pacman -S hdparm (best as linux helper to hard and solid state drives)
 	sudo pacman -S xclip
 	sudo pacman -S the_silver_searcher (more performance than grep, use as 'ag')
-	sudo pacman -S cmatrix
 	sudo pacman -S links (terminal web navigator)
 	sudo pacman -S lrzip (more powerfull, read the man)
 	sudo pacman -S etcher (ISO's pen drive burner)
 	sudo pacman -S transmission-gtk (torrents)
-	pacaur -S debtap (convert .deb packages to pacman in some situations that it do not exists on AUR)
 
 #### Office
 
@@ -242,19 +243,12 @@ Go to menu and find *Firewall Configuration* app:
 
 All apps are native, not **Electron** crap:
 
-	sudo pacman -S firefox (use epiphany as your primary web)
+	sudo pacman -S firefox
 	pacaur -S discord-canary
 	pacaur -S zoom
 	pacaur -S slack-desktop
 	pacaur -S teams
 	pacaur -S telegram-desktop
-	
-#### Vim
-
-	sudo pacman -S vim
-	sudo vim /etc/environment (edit: "EDITOR=/usr/bin/vim")	
-	vim .profile (edit: "export EDITOR=/usr/bin/vim")
-	reboot
 		
 #### Git (+ssh config)
 
@@ -469,7 +463,7 @@ Some reading about Mitigations and Watchdog (optional):
 			
 Disable Mitigations, Watchdog and Hibernate with kernel parameters 'nohibernate nowatchdog mitigations=off' on boot parameters:
 
-	sudo vim /boot/loader/entries/manjarolinux5.8.conf
+	sudo vim /boot/loader/entries/manjarolinux5.9.conf
 	'options	root=UUID=fac688f2-9966-49df-9320-b533b82d6b89 rw nohibernate nowatchdog mitigations=off'
 
 Find more Kernel parameters: https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
@@ -619,9 +613,9 @@ Firmware update of another brands on linux:
 	https://wiki.archlinux.org/index.php/Solid_state_drive#Firmware
 			
 TODO NVM-Express user space tooling for Linux:
-		
-	pacman -S nvme-cli                                                                                                  
-	
+
+	pacman -S nvme-cli
+
 ### Dark Gnome customization
 
 #### First steps
@@ -677,7 +671,8 @@ Now, reboot your system.
 
 Let's do a basic stress and stability test. Observe for some minutes the cpu and gpu temps:
 
-	CPU and GPU should not be Higher than 90C
+	CPU 80C is acceptable
+	GPU depends a lot, but if it is below 90 is acceptable
 
 Open psensor and use it to monitor:
 
@@ -718,7 +713,7 @@ You could have more than one kernel versions (modules) on:
 
 TODO (not tested yet). If you install another linux kernel and need to change it on boot, look at boot files to change it:
 
-	cat /boot/loader/entries/manjarolinux5.8.conf
+	cat /boot/loader/entries/manjarolinux5.9.conf
 	cat /boot/loader/loader.conf 
 
 #### Kernel location
