@@ -315,7 +315,7 @@ Reload terminal:
 	sbt --version (wait for downloads)
 	* if terminal shows any [error] message downloading, execute 'sbt --version' again!
 
-#### InteliJ
+InteliJ, IDE for Java and Scala:
 
 	sudo pacman -S intellij-idea-community-edition
 		
@@ -336,13 +336,33 @@ Install the PyPy3, VM with Jit + performance:
 	pip list
 	deactivate
 		
-#### Pycharm
+Pycharm, IDE for Python:
 
 	sudo pacman -S pycharm-community-edition
 		
-Open it, on settings, new projects check if all interpreters are recognized to create virtual envs (python3 and pypy3)
+Open Pycharm, on settings, new projects check if all interpreters are recognized to create virtual envs (python3 and pypy3)
 
 Add the two envs that we just created on terminal as *Existing environments* and check *Make available to all projects*
+		
+#### Snapd
+
+	sudo pacman -S snapd 
+	systemctl enable --now apparmor.service
+ 	systemctl enable --now snapd.apparmor.service
+		
+#### dotnet
+
+Community arch supported versions, search:
+
+	sudo pacman -Ss dotnet
+	
+If the version is not there, use snap:
+
+	sudo snap install dotnet-sdk --classic --channel=5.0
+	
+After any install, check it:
+
+	dotnet --list-sdks
 		
 #### Teamviewer (native for linux, manual install)
 
@@ -372,14 +392,24 @@ Install:
 
 	pacaur -S soapui
 
-#### Sublime Text 3 (optional)
+#### Sublime Text 3 (native)
 
-Prefer using gedit, but:
-	
-	echo -e "\n[sublime-text]\nServer = https://download.sublimetext.com/arch/stable/x86_64" | sudo tee -a /etc/pacman.conf
+Install the GPG key:
+
 	curl -O https://download.sublimetext.com/sublimehq-pub.gpg && sudo pacman-key --add sublimehq-pub.gpg && sudo pacman-key --lsign-key 8A8F901A && rm sublimehq-pub.gpg
+	
+Select stable channel:
+
+	echo -e "\n[sublime-text]\nServer = https://download.sublimetext.com/arch/stable/x86_64" | sudo tee -a /etc/pacman.conf
+	
+Install:
+
 	sudo pacman -S sublime-text
-		
+	
+If does not work do with pacman update: 
+
+	sudo pacman -Syu sublime-text
+	
 ### Sanitize
 
 Clean package manager cache:
