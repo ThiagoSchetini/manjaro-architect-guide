@@ -360,9 +360,23 @@ If the version is not there, use snap:
 
 	sudo snap install dotnet-sdk --classic --channel=5.0
 	
-After any install, check it:
+Add autocomplete on .zshrc:
+
+	# zsh parameter completion for the dotnet CLI
+	_dotnet_zsh_complete()
+	{
+	  local completions=("$(dotnet complete "$words")")
+
+	  reply=( "${(ps:\n:)completions}" )
+	}
+	compctl -K _dotnet_zsh_complete dotnet
+	
+After all, check it:
 
 	dotnet --list-sdks
+	dotnet --version
+	dotnet a+TAB (*autocomplete)
+	dotnet +TAB (*autocomplete)
 		
 #### Teamviewer (native for linux, manual install)
 
