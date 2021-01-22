@@ -381,6 +381,9 @@ After all, check it:
 Visual Studio code, ide for C# (native version):
 
 	pacaur -S visual-studio-code-bin 
+	open it
+	CTRL+P
+	ext install ms-dotnettools.csharp
 		
 #### Teamviewer (native for linux, manual install)
 
