@@ -377,6 +377,10 @@ After all, check it:
 	dotnet --version
 	dotnet a+TAB (*autocomplete)
 	dotnet +TAB (*autocomplete)
+	
+Visual Studio code, ide for C# (native version):
+
+	pacaur -S visual-studio-code-bin 
 		
 #### Teamviewer (native for linux, manual install)
 
