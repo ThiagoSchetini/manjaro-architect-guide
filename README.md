@@ -229,6 +229,62 @@ Go to menu and find *Firewall Configuration* app:
 	sudo pacman -S lrzip (more powerfull, read the man)
 	sudo pacman -S etcher (ISO's pen drive burner)
 	sudo pacman -S transmission-gtk (torrents)
+	
+#### nvidia fan control
+
+First of all:
+
+	sudo nvidia-settings
+	goto GPU0: Thermal Settings/Enable GPU Fan Settings
+	goto: X Server Display Configuration/Save to X Configuration File
+	save on: /etc/X11/mhwd.d/nvidia.conf 
+	
+	sudo mhwd-gpu --setmod nvidia --setxorg /etc/X11/mhwd.d/nvidia.conf 
+	reboot
+	
+Try to install. If it breaks because "nvidia-settings" follow the next steps: 
+
+	pacaur -S nfancurve -d
+	
+Is it broke? Open PKGBUILD:
+
+	vim /home/thiagosc/.cache/pacaur/nfancurve/PKGBUILD 
+	
+Remove the line:
+	
+	depends=("bash" "nvidia-utils" "nvidia-settings" "procps")
+	
+Try to install again:
+
+	pacaur -S nfancurve					
+	
+Config the fan profile, as an example:
+
+	sudo vim /etc/nfancurve.conf
+	
+	min_t="25" (if your GPU supports zero speed fans)
+	sleep_time="3" (more responsive fans)
+	
+	*example: quiet but fast when near the final heat*
+	fcurve="30 30 40 50 70 70 85" # fan speeds
+	tcurve="35 50 55 60 65 90 99" # temperatures
+	
+If your GPU has two PWM fan, set it or use the same profile on **which_curve** param:
+
+	fcurve2="...
+	tcurve2="...
+
+	which_curve="1 1 1 2"
+
+More configs? Read the instructions on the nfancurve.conf. Now Test it:
+
+	nfancurve -l -c /etc/nfancurve.conf 
+
+Finally, enable as a service:
+
+	systemctl --user daemon-reload
+	systemctl --user start nfancurve.service
+	systemctl --user enable nfancurve.service
 
 #### Office
 
@@ -238,6 +294,7 @@ Go to menu and find *Firewall Configuration* app:
 	sudo pacman -S kdenlive (video editor)
 	sudo pacman -S krita (image editor)
 	pacaur -S exif (image metadata editor)
+	pacaur -S ideamaker (3D files viewer)
 	
 #### Internet & Communication
 
