@@ -4,7 +4,7 @@ Under the hood, the *Manjaro Architect* is an *Arch Linux* and the most clean *M
 
 Here you're gonna find Nvidia fan control, system sensors, docker, advanced system configs and packages for development and gaming.
 	
-### Prepare USB key to install
+## Prepare USB key to install
 
 Create your *Architect* pen drive installer: *https://manjaro.org/downloads/official/architect/*
 	
@@ -12,15 +12,15 @@ Set UEFI only on your BIOS (Use UEFI only please!).
 
 Boot the pen drive and start the installation.
 
-### Prepare the installation after the boot
+## Prepare the installation after the boot
 
-#### Partition Disk (installation menu option)
+### Partition Disk (installation menu option)
 
 Choose Automatic partitioning on your sda/nvme (it creates the boot + root partitions). 
 
 Automatic is enough and perfect! It does the correct format and size for each one.
 
-#### Mount Partitions (installation menu option)
+### Mount Partitions (installation menu option)
 
 Mount root partition (for system files): 
 
@@ -34,9 +34,9 @@ Mount UEFI partition (for boot files):
 	sda1 (or nvme01)
 	mountpoint on /boot (for systemd-boot)
 
-### Start the Installation!
+## Start the Installation!
 
-#### Install Manjaro Desktop (installation menu option)
+### Install Manjaro Desktop (installation menu option)
 
 Choose:
 
@@ -67,13 +67,13 @@ Kernel extras:
 	KERNEL-r8168 (when you have a Realtek PCIe Ethernet)
 	KERNEL-tp_smapi (when you are using a thinkpad notebook)
 
-#### Install Bootloader (installation menu option)
+### Install Bootloader (installation menu option)
 
 Choose *systemd*. It's newer than the old *grub*, follows a new specification that make it simple to config and will better support dual boot. Check more info on *https://systemd.io*
 
 	systemd-boot
 		
-#### Configure Base (installation menu option)
+### Configure Base (installation menu option)
 
 Generate FSTAB (file): 
 
@@ -104,9 +104,9 @@ No tweaks (we will have performance improves later).
 
 Finally, reboot your system.
 
-### After install (reboot) 
+## After install (reboot) 
 	
-#### Time
+### Time
 
 First check if your hardware/BIOS is on UTC. (probably not the same time of your system).
 
@@ -128,7 +128,7 @@ For dual boot your Windows OS needs to be adjusted to UTC:
 
 	https://wiki.archlinux.org/index.php/System_time#Set_hardware_clock_from_system_clock
 		
-#### SSH 
+### SSH 
 
  If you have private and public keys, bypass this *SSH* creation. If you do not have, let's create one to use ssh:
 
@@ -155,7 +155,7 @@ Add the private key to the agent (put your passphrase and you can log on server 
 
 	ssh-add ~/.ssh/id_ed25519
 
-#### Firewall
+### Firewall
 
 Go to menu and find *Firewall Configuration* app:
 		
@@ -164,14 +164,14 @@ Go to menu and find *Firewall Configuration* app:
 	incoming=deny
 	outgoing=allow
 	
-#### Using Vim as the default terminal editor
+### Using Vim as the default terminal editor
 
 	sudo pacman -S vim
 	sudo vim /etc/environment (edit: "EDITOR=/usr/bin/vim")	
 	vim .profile (edit: "export EDITOR=/usr/bin/vim")
 	reboot
 	
-#### Git (+ssh config)
+### Git (+ssh config)
 
 	sudo pacman -S git
 		
@@ -195,7 +195,7 @@ Test activity on your git, and check if everything is ok, example:
 	cd ~/Repositories/github
 	git clone git@github.com:ThiagoSchetini/drnglib.git
 
-#### Remove Manjaro Junk
+### Remove Manjaro Junk
 
 	sudo pacman -Rs manjaro-hello manjaro-application-utility
 	sudo pacman -Rs yay 
@@ -204,7 +204,7 @@ Test activity on your git, and check if everything is ok, example:
 	sudo pacman -Rs epiphany
 	sudo pacman -Rs pamac-gtk pamac-gnome-integration gnome-layout-switcher
 	
-#### Check/Install Utilities packages that we are gonna use (probably some are pre-installed):
+### Check/Install Utilities packages that we are gonna use (probably some are pre-installed):
 
 	sudo pacman -S curl
 	sudo pacman -S grep
@@ -226,9 +226,9 @@ Test activity on your git, and check if everything is ok, example:
 	sudo pacman -S etcher (ISO's pen drive burner)
 	sudo pacman -S transmission-gtk (torrents)
 	
-### System Improvement
+## System Improvement
 
-#### Nvidia fan control for Manjaro Arch Linux distro
+### Nvidia fan control for Manjaro Arch Linux distro
 
 First of all:
 
@@ -282,7 +282,7 @@ Finally, enable as a service:
 	
 	reboot
 	
-#### System monitor sensors
+### System monitor sensors
 	
 Update sensors (if something goes wrong, detect again, enter Y on all questions):
 
@@ -297,7 +297,7 @@ On menu, open psensor:
 	"launch on session startup"
 	"enable launch on session startup"
 	
-#### Disable mitigations and hibernate
+### Disable mitigations and hibernate
 
 Disable the linux kernel juggling to avoid hyperthreading exploit vulnerabilities, the mitigations.
 
@@ -320,11 +320,11 @@ Check if Mitigations are off looking for disabled and vulnerable words (great!):
 
 	grep -H '' /sys/devices/system/cpu/vulnerabilities/*
 	
-#### Install nvme user space tooling for Linux
+### Install nvme user space tooling for Linux
 
 	pacman -S nvme-cli
 	
-#### More parallelism on sata protocol to SSD's
+### More parallelism on sata protocol to SSD's
 
 Check the scheduler used to all devices (rotating, ssd, nvme). **nvme** does not need because is connected directly on PCIe lanes:
 
@@ -357,7 +357,7 @@ Reboot then check:
 	grep "" /sys/block/*/queue/scheduler
 	grep "" /sys/block/*/queue/iosched/fifo_batch
 	
-#### Enable trim auto service (to SSD's and nvme's)
+### Enable trim auto service (to SSD's and nvme's)
 	
 *Continuous trim is not recommended by UNIX community*. Distros like Ubuntu come with trim scheduled to run once a week. Arch does not. Even so, let's check first:
 
@@ -367,11 +367,11 @@ Reboot then check:
 	
 	Hint: you should read *Active: active (waiting)*
 
-#### TLPUI power configuration
+### TLPUI power configuration
 
 Look for TLPUI app and open it. Read everything and check if there is something to customize.
 
-#### Format and permanent mount a unit
+### Format and permanent mount a unit
 
 Make the label:
 	
@@ -409,7 +409,7 @@ Reboot then check:
 	sudo fdisk --list
 	ls -la /data
 	
-#### Keyring
+### Keyring
 
 Refresh the the web of trust of pacman keys:
 
@@ -417,7 +417,7 @@ Refresh the the web of trust of pacman keys:
 	sudo pacman-key --refresh-keys
 	sudo pacman-key --populate archlinux manjaro
 	
-#### Remember to customize on Settings
+### Remember to customize on Settings
 
 Wifi: config your wireless and them, if using desktop cable, disable it.
 
@@ -429,7 +429,7 @@ Displays/Night Light: manual set 17h00 to 8h00
 
 Mouse & Touchpad/Mouse: enable natural scrolling
 		
-#### Darkness
+### Darkness
 
 On terminal:
 
@@ -466,9 +466,9 @@ On terminal:
 	
 Reboot
 	
-### Development Packages
+## Development Packages
 
-#### Docker
+### Docker
 
 	sudo pacman -S docker
 	sudo usermod -aG docker $USER
@@ -482,7 +482,7 @@ If you have nvidia GPU:
 	reboot system
 	docker run -it --rm --gpus all ubuntu nvidia-smi
 	
-#### JVM
+### JVM
 
 	sudo pacman -S jre8-openjdk
 	sudo pacman -S jre11-openjdk
@@ -512,7 +512,7 @@ InteliJ, IDE for Java and Scala:
 
 	sudo pacman -S intellij-idea-community-edition
 		
-#### .NET 5
+### .NET 5
 
 Community arch supported versions, search:
 
@@ -550,7 +550,7 @@ Visual Studio code, ide for C# (native version):
 	CTRL+P
 	ext install ms-dotnettools.csharp
 	
-#### Python3
+### Python3
 
 Create the default venv python directory, and test it:
 
@@ -575,11 +575,11 @@ Open Pycharm, on settings, new projects check if all interpreters are recognized
 
 Add the two envs that we just created on terminal as *Existing environments* and check *Make available to all projects*
 
-#### Soap UI
+### Soap UI
 
 	pacaur -S soapui
 
-#### Sublime Text 3 (native)
+### Sublime Text 3 (native)
 
 Install the GPG key:
 
@@ -597,11 +597,11 @@ If does not work do with pacman update:
 
 	sudo pacman -Syu sublime-text
 	
-### User Packages
+## User Packages
 
 All apps are native, not **Electron** crap. Select the ones that make sense for you.
 
-#### Office
+### Office
 
 	sudo pacman -S freeoffice (remember to add the key for free)
 	sudo pacman -S rhythmbox (audio player)
@@ -611,7 +611,7 @@ All apps are native, not **Electron** crap. Select the ones that make sense for 
 	pacaur -S exif (image metadata editor)
 	pacaur -S ideamaker (3D files editor)
 	
-#### Internet & Communication
+### Internet & Communication
 
 	sudo pacman -S firefox
 	pacaur -S discord-canary
@@ -621,19 +621,19 @@ All apps are native, not **Electron** crap. Select the ones that make sense for 
 	pacaur -S zoom
 	pacaur -S teamviewer14
 
-#### Spotify (native for linux)
+### Spotify (native for linux)
 
 Sign the key and install:
 
 	curl -sS https://download.spotify.com/debian/pubkey.gpg | gpg --import -
 	pacaur -S spotify
 
-#### Gaming
+### Gaming
 
 	pacaur -S unigine-superposition
 	pacaur -S unigine-heaven
 
-### Final check list
+## Final check list
 
 	[mantain arch] bmenu (1 Package manager UI>2 Maintain System)
 	[clean cache] sudo pacman -Sc
@@ -650,7 +650,7 @@ Sign the key and install:
 	[device space] df -H 
 	[gpu rendering] glxinfo | grep 'direct rendering'
 
-### Change Kernel 
+## Change Kernel 
 
 All kernel boot params (official docs): https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
 
