@@ -34,12 +34,6 @@ Mount UEFI partition (for boot files):
 	sda1 (or nvme01)
 	mountpoint on /boot (for systemd-boot)
 
-#### (optional) Keys and cache
-	
-On *Pacman Keys* menu option run refresh pacman keys.
-
-Then on *Pacman Cache* menu option choose *yes* to save some time on installation.
-
 ### Start the Installation!
 
 #### Install Manjaro Desktop (installation menu option)
@@ -64,18 +58,18 @@ Network Driver:
 
 	auto-install proprietary
 
-Kernel:
+Kernel extras:
 
-	Choose some basics and specifc drivers for your hardware as the examples below.
+	Choose some specifc drivers for your hardware if you need as the examples below.
 
 	KERNEL-headers (good idea for development environments)
-	KERNEL-acpi_call (use calls: https://github.com/mkottman/acpi_call)
-	KERNEL-r8168 (EXAMPLE of Realtek PCIe Ethernet)
-	KERNEL-tp_smapi (EXAMPLE of thinkpad notebooks)
+	KERNEL-acpi_call (if you need to use acpi calls: https://github.com/mkottman/acpi_call)
+	KERNEL-r8168 (when you have a Realtek PCIe Ethernet)
+	KERNEL-tp_smapi (when you are using a thinkpad notebook)
 
 #### Install Bootloader (installation menu option)
 
-Choose systemd. It's newer than the old grub, follows a new specification that make it simple to config and will better support dual boot. Check more info on https://systemd.io
+Choose *systemd*. It's newer than the old *grub*, follows a new specification that make it simple to config and will better support dual boot. Check more info on *https://systemd.io*
 
 	systemd-boot
 		
@@ -192,7 +186,7 @@ Config your global Git identity:
 	git config --global user.email "you@example.com"
 	git config --global user.name "Your Name"
 
-Add your public ssh key to git server as the example below:
+Add your public ssh key to git server. You can read the value with the command below, then add to the git website or git server:
 
 	xclip -sel clip < ~/.ssh/id_ed25519.pub
 
@@ -234,7 +228,7 @@ Test activity on your git, and check if everything is ok, example:
 	
 ### System Improvement
 
-#### Nvidia fan control
+#### Nvidia fan control for Manjaro Arch Linux distro
 
 First of all:
 
@@ -286,6 +280,8 @@ Finally, enable as a service:
 	systemctl --user start nfancurve.service
 	systemctl --user enable nfancurve.service
 	
+	reboot
+	
 #### System monitor sensors
 	
 Update sensors (if something goes wrong, detect again, enter Y on all questions):
@@ -324,13 +320,13 @@ Check if Mitigations are off looking for disabled and vulnerable words (great!):
 
 	grep -H '' /sys/devices/system/cpu/vulnerabilities/*
 	
-#### Nvme user space tooling for Linux:
+#### Install nvme user space tooling for Linux
 
 	pacman -S nvme-cli
 	
 #### More parallelism on sata protocol to SSD's
 
-Check the scheduler used to all devices (rotating, ssd, nvme). **nvme** does not need because is connected directly on PCI lanes:
+Check the scheduler used to all devices (rotating, ssd, nvme). **nvme** does not need because is connected directly on PCIe lanes:
 
 	[none] to nvme
 	[mq-deadline] to ssd
@@ -342,7 +338,7 @@ Let's increase the *mq-deadline* paralellism (SSD only). Open the *.rules* on vi
 
 	sudo vim /etc/udev/rules.d/60-ioscheduler.rules
 		
-There is a sample that you can just copy and paste to the .rules file with ATTR=32:
+Use this sample. Copy and paste to the .rules file above. Note the "32" value on the last line:
 
 	# set scheduler for NVMe
 	ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/scheduler}="none"
@@ -356,7 +352,7 @@ There is a sample that you can just copy and paste to the .rules file with ATTR=
 	# improves throughput of devices at the cost of latency (default is 16). Only on SSD [mq-deadline]
 	ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0", ATTR{queue/iosched/fifo_batch}="32"
 
-Reboot before check:
+Reboot then check:
 		
 	grep "" /sys/block/*/queue/scheduler
 	grep "" /sys/block/*/queue/iosched/fifo_batch
@@ -369,7 +365,7 @@ Reboot before check:
 	reboot
 	systemctl status fstrim.timer
 	
-You should read *Active: active (waiting)*
+	Hint: you should read *Active: active (waiting)*
 
 #### TLPUI power configuration
 
@@ -413,7 +409,7 @@ Reboot then check:
 	sudo fdisk --list
 	ls -la /data
 	
-#### KEYRING
+#### Keyring
 
 Refresh the the web of trust of pacman keys:
 
@@ -421,7 +417,7 @@ Refresh the the web of trust of pacman keys:
 	sudo pacman-key --refresh-keys
 	sudo pacman-key --populate archlinux manjaro
 	
-#### Remember to customize on Settings:
+#### Remember to customize on Settings
 
 Wifi: config your wireless and them, if using desktop cable, disable it.
 
