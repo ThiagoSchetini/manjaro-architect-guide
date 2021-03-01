@@ -1,50 +1,48 @@
-# Manjaro Architect Guide 
+# Manjaro Architect install guide 
 
-A installation guide of Archlinux Manjaro distro using the Manjaro Architect Advanced tool!
+Under the hood, the *Manjaro Architect* is an *Arch Linux* and the most clean *Manjaro* option.
 
-This guide is focused on performance and security with some additional packages for developers, specialy for data engineers.
-
-Requires some hardware background and basic shell commands knowledge.
+Here you're gonna find Nvidia fan control, system sensors, docker, advanced system configs and packages for development and gaming.
 	
-### Prepare the instalation
+### Prepare USB key to install
 
-Create your Architect pen driver installer: https://manjaro.org/downloads/official/architect/
+Create your *Architect* pen drive installer: *https://manjaro.org/downloads/official/architect/*
 	
-Use UEFI only (on your BIOS), boot the pen drive and start:
+Set UEFI only on your BIOS (Use UEFI only please!).
 
-#### [?] Partition Disk
+Boot the pen drive and start the installation.
 
-Choose Automatic partitioning on your sda (it creates the boot + root parts) or use *parted* on manual mode if you have knowledge. Automatic is enough and perfect!
+### Prepare the installation after the boot
 
-#### [?] Mount Partitions
+#### Partition Disk (installation menu option)
 
-Mount root partition: 
+Choose Automatic partitioning on your sda/nvme (it creates the boot + root partitions). 
+
+Automatic is enough and perfect! It does the correct format and size for each one.
+
+#### Mount Partitions (installation menu option)
+
+Mount root partition (for system files): 
 
 	sda2 (or nvme02)
 	format ext4
 	options relatime (or none)
 	swap none (If you need swap, use swap file option)
 
-Mount UEFI partition: 
+Mount UEFI partition (for boot files): 
 
 	sda1 (or nvme01)
 	mountpoint on /boot (for systemd-boot)
 
-#### [?] Installer Mirrorlist 
-
-Choose: Rank Mirrors by speed
-
-#### [?] Refresh Pacman Keys
+#### (optional) Keys and cache
 	
-Run it (good idea).
+On *Pacman Keys* menu option run refresh pacman keys.
 
-#### [?] Pacman cache
+Then on *Pacman Cache* menu option choose *yes* to save some time on installation.
 
-Choose Yes (save some time on installation).
+### Start the Installation!
 
-### Start
-
-#### [1] Install Manjaro Desktop
+#### Install Manjaro Desktop (installation menu option)
 
 Choose:
 
@@ -55,9 +53,9 @@ Choose:
 		
 Display Driver: 
 
-*Warning: if your cpu does not have internal gpu, your graphics card/chip probably will loose the video signal!*
+	*Warning! Warning! Warning!: if your cpu does not have internal gpu, your graphics card/chip probably will loose the video signal!*
 
-If it happens, wait some minutes, reboot, mount again, do not format and reinstall. The driver will be already ok and the installation will continue from the broken point.
+	If it happens, wait some minutes, reboot, mount again, do not format and reinstall. The driver will be already ok and the installation will continue from the broken point.
 
 	Intel: auto-install free drivers
 	nvidia/AMD: auto-install proprietary drivers
@@ -66,32 +64,30 @@ Network Driver:
 
 	auto-install proprietary
 
-Kernel (additional driver may appear, know your hardware): 
+Kernel:
 
-	KERNEL-headers (good idea)
+	Choose some basics and specifc drivers for your hardware as the examples below.
+
+	KERNEL-headers (good idea for development environments)
 	KERNEL-acpi_call (use calls: https://github.com/mkottman/acpi_call)
-	... more ...
-	KERNEL-r8168 (example if you have Realtek PCIe Ethernet)
-	KERNEL-tp_smapi (example for thinkpad notebooks)
-	... etc ....
+	KERNEL-r8168 (EXAMPLE of Realtek PCIe Ethernet)
+	KERNEL-tp_smapi (EXAMPLE of thinkpad notebooks)
 
-#### [2] Install Bootloader
+#### Install Bootloader (installation menu option)
 
-Choose:
+Choose systemd. It's newer than the old grub, follows a new specification that make it simple to config and will better support dual boot. Check more info on https://systemd.io
 
 	systemd-boot
-
-	It's newer than the old grub, follows a new specification that make it simple to config and will better support dual boot. Check more info on https://systemd.io
 		
-#### [3] Configure Base
+#### Configure Base (installation menu option)
 
 Generate FSTAB (file): 
 
 	Device UUID
 		
-Set Hostname: 
+Set Hostname. You can find a professional or machine related name. Examples below: 
 
-	"i7-3632QM" or "Xeon-E3-1270V3" or Workstation3 ... (put a good machine related name)
+	"i7-3632QM", "Xeon-E3-1270V3", "Workstation3", "GamerMachine2"
 		
 Set System Locale:
 
@@ -112,25 +108,23 @@ Add New User:
 		
 No tweaks (we will have performance improves later).
 
-Reboot your system.
+Finally, reboot your system.
 
-### Security 
+### After install (reboot) 
 	
 #### Time
 
-Hardware should be always on UTC (do not change your BIOS clock manually).
+First check if your hardware/BIOS is on UTC. (probably not the same time of your system).
 
-Check your timezone on Settings.
+Then on *Settings*, check your timezone.
 
-RTC in local TZ (timezone) must be *"no"*. On terminal type:
+Check the RTC in local TZ (timezone) must be *no*:
 
 	timedatectl status
-		
-If you need to set RTC in local TZ to no:
+
+If you need to set RTC in local TZ to *no*:
 
 	timedatectl set-local-rtc 0
-	timedatectl status
-	*should read: 'RTC in local TZ: no'
 			
 Calibrate system time:
 
@@ -140,26 +134,12 @@ For dual boot your Windows OS needs to be adjusted to UTC:
 
 	https://wiki.archlinux.org/index.php/System_time#Set_hardware_clock_from_system_clock
 		
-#### KEYRING
-
-Refresh the the web of trust of pacman keys:
-
-	sudo pacman-key --init
-	sudo pacman-key --refresh-keys
-	sudo pacman-key --populate archlinux manjaro
-
-#### Update using BMENU
-
-On terminal, type:
-
-	bmenu
-	choose "1 Package manager UI", then "1 Update System"
-		
 #### SSH 
 
-If you do not have a signature to use ssh, let's create one. Use a passphrase when it asks:
+ If you have private and public keys, bypass this *SSH* creation. If you do not have, let's create one to use ssh:
 
 	ssh-keygen -o -a 300 -t ed25519 -f ~/.ssh/id_ed25519 -C "MY-MACHINE"
+	*then use a passphrase when it asks*
 
 Read private key (do not show it to anyone):
 
@@ -190,25 +170,47 @@ Go to menu and find *Firewall Configuration* app:
 	incoming=deny
 	outgoing=allow
 	
-#### Vim
+#### Using Vim as the default terminal editor
 
 	sudo pacman -S vim
 	sudo vim /etc/environment (edit: "EDITOR=/usr/bin/vim")	
 	vim .profile (edit: "export EDITOR=/usr/bin/vim")
 	reboot
+	
+#### Git (+ssh config)
 
-### Remove Junk
+	sudo pacman -S git
+		
+Create directories to repositories of code, example:
+
+	mkdir ~/Repositories
+	mkdir ~/Repositories/github
+	mkdir ~/Repositories/gitbucket
+
+Config your global Git identity:
+
+	git config --global user.email "you@example.com"
+	git config --global user.name "Your Name"
+
+Add your public ssh key to git server as the example below:
+
+	xclip -sel clip < ~/.ssh/id_ed25519.pub
+
+Test activity on your git, and check if everything is ok, example:
+
+	cd ~/Repositories/github
+	git clone git@github.com:ThiagoSchetini/drnglib.git
+
+#### Remove Manjaro Junk
 
 	sudo pacman -Rs manjaro-hello manjaro-application-utility
-	sudo pacman -Rs pamac-gtk pamac-gnome-integration gnome-layout-switcher
 	sudo pacman -Rs yay 
 	sudo pacman -Rs nano
 	sudo pacman -Rs vi (ensure you installed the vim part, because pacaur will need it)
 	sudo pacman -Rs epiphany
+	sudo pacman -Rs pamac-gtk pamac-gnome-integration gnome-layout-switcher
 	
-### Packages
-
-#### Utils (probably some are pre-installed):
+#### Check/Install Utilities packages that we are gonna use (probably some are pre-installed):
 
 	sudo pacman -S curl
 	sudo pacman -S grep
@@ -219,7 +221,7 @@ Go to menu and find *Firewall Configuration* app:
 	sudo pacman -S archlinux-keyring
 	sudo pacman -S mesa-demos (GPU monitoring and test > www.mesa3d.org)
 	sudo pacman -S tlpui (usefull visual interface for tlp)
-	sudo pacman -S pacaur (AUR package manager, BE CAREFULL, read the instructions)
+	sudo pacman -S pacaur (AUR package manager)
 	sudo pacman -S bashtop (much metter than 'top' or 'htop')
 	sudo pacman -S iotop
 	sudo pacman -S hdparm (best as linux helper to hard and solid state drives)
@@ -230,7 +232,9 @@ Go to menu and find *Firewall Configuration* app:
 	sudo pacman -S etcher (ISO's pen drive burner)
 	sudo pacman -S transmission-gtk (torrents)
 	
-#### nvidia fan control
+### System Improvement
+
+#### Nvidia fan control
 
 First of all:
 
@@ -242,11 +246,11 @@ First of all:
 	sudo mhwd-gpu --setmod nvidia --setxorg /etc/X11/mhwd.d/nvidia.conf 
 	reboot
 	
-Try to install. If it breaks because "nvidia-settings" follow the next steps: 
+Try to install: 
 
 	pacaur -S nfancurve -d
 	
-Is it broke? Open PKGBUILD:
+If it breaks because "nvidia-settings" follow the next steps. Open PKGBUILD:
 
 	vim /home/thiagosc/.cache/pacaur/nfancurve/PKGBUILD 
 	
@@ -254,29 +258,25 @@ Remove the line:
 	
 	depends=("bash" "nvidia-utils" "nvidia-settings" "procps")
 	
-Try to install again:
+Try again:
 
 	pacaur -S nfancurve					
 	
-Config the fan profile, as an example:
+Config the fan profile and PWM signal. Quiet and non-linear increase suggestion:
 
 	sudo vim /etc/nfancurve.conf
 	
 	min_t="25" (if your GPU supports zero speed fans)
 	sleep_time="3" (more responsive fans)
-	
-	*example: quiet but fast when near the final heat*
-	fcurve="30 30 40 50 70 70 85" # fan speeds
-	tcurve="35 50 55 60 65 90 99" # temperatures
-	
-If your GPU has two PWM fan, set it or use the same profile on **which_curve** param:
 
-	fcurve2="...
-	tcurve2="...
+	fcurve="30 30 70 85 85 99" # fan speeds
+	tcurve="30 55 60 65 80 85" # temperatures
+
+If your GPU has two PWM fan, set it or use the same profile on **which_curve** param:
 
 	which_curve="1 1 1 2"
 
-More configs? Read the instructions on the nfancurve.conf. Now Test it:
+More configs? Read the instructions on the nfancurve.conf. Required test:
 
 	nfancurve -l -c /etc/nfancurve.conf 
 
@@ -285,52 +285,192 @@ Finally, enable as a service:
 	systemctl --user daemon-reload
 	systemctl --user start nfancurve.service
 	systemctl --user enable nfancurve.service
-
-#### Office
-
-	sudo pacman -S freeoffice (remember to add the key for free)
-	sudo pacman -S rhythmbox (audio player)
-	sudo pacman -S audacity (audio editor)
-	sudo pacman -S kdenlive (video editor)
-	sudo pacman -S krita (image editor)
-	pacaur -S exif (image metadata editor)
-	pacaur -S ideamaker (3D files viewer)
 	
-#### Internet & Communication
+#### System monitor sensors
+	
+Update sensors (if something goes wrong, detect again, enter Y on all questions):
 
-All apps are native, not **Electron** crap:
-
-	sudo pacman -S firefox
-	pacaur -S discord-canary
-	pacaur -S zoom
-	pacaur -S slack-desktop
-	pacaur -S teams
-	pacaur -S telegram-desktop
+	sudo sensors-detect
+	sensors
+	sudo pacman -S psensor
 		
-#### Git (+ssh config)
+On menu, open psensor:
 
-	sudo pacman -S git
+	choose cpu temp and/or others to show on your topbar
+	/Edit Preferences/Startup/ enable 
+	"launch on session startup"
+	"enable launch on session startup"
+	
+#### Disable mitigations and hibernate
+
+Disable the linux kernel juggling to avoid hyperthreading exploit vulnerabilities, the mitigations.
+
+Find your current *kernel* configuration file:
+
+	ls -la /boot/loader/entries
+
+Open it and add the flags **nohibernate** and  **mitigations=off** on boot options as the example below:
+
+	sudo vim /boot/loader/entries/manjarolinux5.9.conf
+	'options	root=UUID=fac688f2-9966-49df-9320-b533b82d6b89 rw nohibernate mitigations=off'
+
+Reboot
 		
-Create directories to repositories of code, example:
+Check if the boot params are they there:
 
-	mkdir ~/Repositories
-	mkdir ~/Repositories/github
-	mkdir ~/Repositories/gitbucket
-	... another names, like companyname, etc...
+	cat /proc/cmdline
 
-Config your global Git identity:
+Check if Mitigations are off looking for disabled and vulnerable words (great!):
 
-	git config --global user.email "you@example.com"
-	git config --global user.name "Your Name"
+	grep -H '' /sys/devices/system/cpu/vulnerabilities/*
+	
+#### Nvme user space tooling for Linux:
 
-Add your public ssh key to git server:
+	pacman -S nvme-cli
+	
+#### More parallelism on sata protocol to SSD's
 
-	xclip -sel clip < ~/.ssh/id_ed25519.pub
+Check the scheduler used to all devices (rotating, ssd, nvme). **nvme** does not need because is connected directly on PCI lanes:
 
-Test activity on your git, and check if everything is ok, example:
+	[none] to nvme
+	[mq-deadline] to ssd
+	[bfq] to rotational 
+		
+	grep "" /sys/block/*/queue/scheduler
+		
+Let's increase the *mq-deadline* paralellism (SSD only). Open the *.rules* on vim to edit:
 
-	cd ~/Repositories/github
-	git clone git@github.com:ThiagoSchetini/drnglib.git
+	sudo vim /etc/udev/rules.d/60-ioscheduler.rules
+		
+There is a sample that you can just copy and paste to the .rules file with ATTR=32:
+
+	# set scheduler for NVMe
+	ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/scheduler}="none"
+
+	# set scheduler for SSD
+	ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
+
+	# set scheduler for rotating disks
+	ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="bfq"
+
+	# improves throughput of devices at the cost of latency (default is 16). Only on SSD [mq-deadline]
+	ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0", ATTR{queue/iosched/fifo_batch}="32"
+
+Reboot before check:
+		
+	grep "" /sys/block/*/queue/scheduler
+	grep "" /sys/block/*/queue/iosched/fifo_batch
+	
+#### Enable trim auto service (to SSD's and nvme's)
+	
+*Continuous trim is not recommended by UNIX community*. Distros like Ubuntu come with trim scheduled to run once a week. Arch does not. Even so, let's check first:
+
+	sudo systemctl enable fstrim.timer
+	reboot
+	systemctl status fstrim.timer
+	
+You should read *Active: active (waiting)*
+
+#### TLPUI power configuration
+
+Look for TLPUI app and open it. Read everything and check if there is something to customize.
+
+#### Format and permanent mount a unit
+
+Make the label:
+	
+	sudo parted /dev/sdb (sdc|sdd|nvme1|nvme2...)
+	mklabel gpt
+	
+Partition:
+
+	mkpart "" ext4 2M 250G (500G|1000G|2000G...)
+	quit
+		
+Format and note/save the UUID generated:
+
+	sudo mkfs.ext4 /dev/sdb1
+	'...'
+	'Filesystem UUID: 3b5f8d12-bc30-4358-9739-b6dc8ae251ff'
+	'...'
+	
+Create the path where you want to mount:
+
+	mkdir /data
+		
+Open fstab to edit:
+
+	sudo vim /etc/fstab
+		
+Add generated UUID to fstab, path and the format (ext4 in this case):
+
+	# /dev/sdb1
+	UUID=3b5f8d12-bc30-4358-9739-b6dc8ae251ff	/data		ext4		rw,relatime	0 0
+		
+Reboot then check:
+
+	sudo blkid (to check the uuid's)
+	sudo fdisk --list
+	ls -la /data
+	
+#### KEYRING
+
+Refresh the the web of trust of pacman keys:
+
+	sudo pacman-key --init
+	sudo pacman-key --refresh-keys
+	sudo pacman-key --populate archlinux manjaro
+	
+#### Remember to customize on Settings:
+
+Wifi: config your wireless and them, if using desktop cable, disable it.
+
+Sound: check your output and your microphone
+
+Power: Blank Screen=Never | Automatic Suspend=Off | Power Button Action = Power Off
+
+Displays/Night Light: manual set 17h00 to 8h00
+
+Mouse & Touchpad/Mouse: enable natural scrolling
+		
+#### Darkness
+
+On terminal:
+
+	bmenu				
+	7 System & Setting > Appearance
+	select dark themes
+		
+Open *Tweaks* on Accessories/Tweaks/Appearance:
+
+	Applications: Matcha-dark-sea
+	Cursor: Xcursor-breeze
+	Icons: Papirus-Dark-Maia
+	Shell: Matcha-dark-sea
+
+Open Accessories/Tweaks/Keyboard & Mouse:
+
+	disable middle click paste
+	disable mouse click emulation
+
+Open Accessories/Kvantum Manager/Change/Delete Theme:
+
+	choose *Matchama-Dark-Aliz*
+
+On terminal:
+
+	vim .config/gtk-2.0/gtkfilechooser.ini
+	'ShowHidden=true'
+
+	vim .config/gtk-3.0/settings.ini
+	'gtk-application-prefer-dark-theme=1'
+
+	vim .config/gtk-4.0/settings.ini
+	'gtk-application-prefer-dark-theme=1'
+	
+Reboot
+	
+### Development Packages
 
 #### Docker
 
@@ -345,7 +485,7 @@ If you have nvidia GPU:
 	pacaur -S nvidia-container-runtime
 	reboot system
 	docker run -it --rm --gpus all ubuntu nvidia-smi
-
+	
 #### JVM
 
 	sudo pacman -S jre8-openjdk
@@ -376,38 +516,7 @@ InteliJ, IDE for Java and Scala:
 
 	sudo pacman -S intellij-idea-community-edition
 		
-#### Python3
-
-Create the default venv python directory, and test it:
-
-	python3 -m venv ~/.venv/python3
-	source ~/.venv/python3/bin/activate
-	pip list
-	deactivate
-		
-Install the PyPy3, VM with Jit + performance:
-
-	sudo pacman -S pypy3
-	pypy3 -m venv ~/.venv/pypy3
-	source ~/.venv/pypy3/bin/activate
-	pip list
-	deactivate
-		
-Pycharm, IDE for Python:
-
-	sudo pacman -S pycharm-community-edition
-		
-Open Pycharm, on settings, new projects check if all interpreters are recognized to create virtual envs (python3 and pypy3)
-
-Add the two envs that we just created on terminal as *Existing environments* and check *Make available to all projects*
-		
-#### Snapd
-
-	sudo pacman -S snapd 
-	systemctl enable --now apparmor.service
- 	systemctl enable --now snapd.apparmor.service
-		
-#### dotnet
+#### .NET 5
 
 Community arch supported versions, search:
 
@@ -415,6 +524,9 @@ Community arch supported versions, search:
 	
 If the version is not there, use snap:
 
+	sudo pacman -S snapd 
+	systemctl enable --now apparmor.service
+ 	systemctl enable --now snapd.apparmor.service
 	sudo snap install dotnet-sdk --classic --channel=5.0
 	
 Add autocomplete on .zshrc:
@@ -441,31 +553,32 @@ Visual Studio code, ide for C# (native version):
 	open it
 	CTRL+P
 	ext install ms-dotnettools.csharp
-		
-#### Teamviewer (native for linux, manual install)
-
-Check dependencies:
-
-	sudo pacman -S qt5-webkit
-	sudo pacman -S qt5-quickcontrols
 	
-Install:
+#### Python3
 
-	git clone https://aur.archlinux.org/teamviewer.git
-	makepkg --install
-	systemctl enable teamviewerd
-	systemctl start teamviewerd
+Create the default venv python directory, and test it:
 
-#### Spotify (native for linux)
-
-Sign the key:
-
-	curl -sS https://download.spotify.com/debian/pubkey.gpg | gpg --import -
+	python3 -m venv ~/.venv/python3
+	source ~/.venv/python3/bin/activate
+	pip list
+	deactivate
 		
-Install:
+Install the PyPy3, VM with Jit + performance:
 
-	pacaur -S spotify
-			
+	sudo pacman -S pypy3
+	pypy3 -m venv ~/.venv/pypy3
+	source ~/.venv/pypy3/bin/activate
+	pip list
+	deactivate
+		
+Pycharm, IDE for Python:
+
+	sudo pacman -S pycharm-community-edition
+		
+Open Pycharm, on settings, new projects check if all interpreters are recognized to create virtual envs (python3 and pypy3)
+
+Add the two envs that we just created on terminal as *Existing environments* and check *Make available to all projects*
+
 #### Soap UI
 
 	pacaur -S soapui
@@ -488,371 +601,72 @@ If does not work do with pacman update:
 
 	sudo pacman -Syu sublime-text
 	
-### Sanitize
+### User Packages
 
-Clean package manager cache:
+All apps are native, not **Electron** crap. Select the ones that make sense for you.
 
-	sudo pacman -Sc
-	sudo pacaur -Sc
+#### Office
+
+	sudo pacman -S freeoffice (remember to add the key for free)
+	sudo pacman -S rhythmbox (audio player)
+	sudo pacman -S audacity (audio editor)
+	sudo pacman -S kdenlive (video editor)
+	sudo pacman -S krita (image editor)
+	pacaur -S exif (image metadata editor)
+	pacaur -S ideamaker (3D files editor)
 	
-Use the incredible Bmenu script to maintain the OS:
+#### Internet & Communication
 
-	bmenu
-	choose "1 Package manager UI", then "2 Maintain System"
+	sudo pacman -S firefox
+	pacaur -S discord-canary
+	pacaur -S teams
+	pacaur -S slack-desktop
+	pacaur -S telegram-desktop
+	pacaur -S zoom
+	pacaur -S teamviewer14
 
-### System Check
+#### Spotify (native for linux)
 
-Read the system info from your Hardware:
-	
-	bmenu
-	choose "2 System Information"
+Sign the key and install:
 
-Check the CPU frequency current policy (governor):
+	curl -sS https://download.spotify.com/debian/pubkey.gpg | gpg --import -
+	pacaur -S spotify
 
-	cpupower frequency-info
-
-Check tlp service is running (if not ... it's a problem, try systemctl enable tlp --now):
-
-	systemctl status tlp
-
-Check the use of swap (should be ZERO if you did not use on installation):
-
-	less /proc/meminfo | grep Swap
-	vmstat
-	free
-
-GPU direct rendering check. It means compositing screen through the GPU and not wasting CPU cycles, see 'direct rendering: Yes':
-
-	glxinfo | grep 'direct rendering'
-
-### System monitor sensors
-	
-Update sensors (if something goes wrong, detect again, enter Y on all questions):
-
-	sudo sensors-detect
-	sensors
-	sudo pacman -S psensor
-		
-On menu, open psensor:
-
-	choose cpu temp and/or others to show on your topbar
-	/Edit Preferences/Startup/ enable 
-	"launch on session startup"
-	"enable launch on session startup"
-
-### Performance
-
-#### TLPUI
-
-Look for TLPUI app and open it. Read everything and check if there is something to change. There is an example of a notebook:
-
-	pcie AC = performance / BAT = powersave
-	turn off nvidia from pcie blacklist
-	disks put the SATA_LINKPWR_ON_AC only on max_performance
-	CPU_SCALING_GOVERNOR_ON_AC = performance
-	CPU_SCALING_GOVERNOR_ON_BAT = powersave
-	CPU_ENERGY_PERF_POLICY  ON_AC = performance ON_BAT=balance_power
-
-#### Mitigations and Watchdog
-
-Some reading about Mitigations and Watchdog (optional):
-
-	About Mitigations
-	Intel hyperthreading has exploit vulnerabilities, and linux kernel can do some juggling to avoid it.
-	If you're not into currency trading or high finance or military contracting or anything of that 
-	nature, consider turning off CPU exploit mitigations appending 'mitigations=off' on boot parameters.
-	Improves performance (sometimes up to 50%).
-	Maybe AMD processors hyperthreading has the same vulnerabilities... TODO
-
-	Watchdog is an electronic timer that is used to detect and recover from computer malfunctions.
-	It degrades the performance, pushing your reset button is more efficient on a desktop environment.
-	To disable watchdog timers (both software and hardware), append 'nowatchdog' to your boot parameters.
-
-			
-Disable Mitigations, Watchdog and Hibernate with kernel parameters 'nohibernate nowatchdog mitigations=off' on boot parameters:
-
-	sudo vim /boot/loader/entries/manjarolinux5.9.conf
-	'options	root=UUID=fac688f2-9966-49df-9320-b533b82d6b89 rw nohibernate nowatchdog mitigations=off'
-
-Find more Kernel parameters: https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
-
-Now, reboot before check the changes.
-		
-Check if the boot params are they there:
-
-	cat /proc/cmdline
-
-Check if Mitigations are off looking for disabled and vulnerable words (great!):
-
-	grep -H '' /sys/devices/system/cpu/vulnerabilities/*
-
-Check if Watchdog is off looking for the zero number signal:
-
-	cat /proc/sys/kernel/watchdog
-				
-#### Dev(ices) schedulers, adding more parallelism on sata protocol
-
-Check the scheduler used to all devices (rotating, ssd, nvme). nvme does not need because is connected directly on PCI lanes. The correct are:
-
-	[none] to nvme
-	[mq-deadline] to ssd
-	[bfq] to rotational 
-		
-	grep "" /sys/block/*/queue/scheduler
-		
-Let's increase the *mq-deadline* paralellism (if you have one). If there is something wrong (like rotating using mq-deadline) you should change it. Open the .rules on vim to edit:
-
-	sudo vim /etc/udev/rules.d/60-ioscheduler.rules
-		
-There is a sample that you can just copy and paste to the .rules file:
-
-	# set scheduler for NVMe
-	ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/scheduler}="none"
-
-	# set scheduler for SSD
-	ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
-
-	# set scheduler for rotating disks
-	ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="bfq"
-
-	# improves throughput of devices at the cost of latency (default is 16). Only on SSD [mq-deadline]
-	ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0", ATTR{queue/iosched/fifo_batch}="32"
-
-Reboot before check:
-		
-	grep "" /sys/block/*/queue/scheduler
-	grep "" /sys/block/*/queue/iosched/fifo_batch
-		
-### SSD and NVME care tasks
-
-#### Format and permanent mount a unit
-
-If you need to format and permanent mount, there is a simple and modern way to to this.
-
-Let's start making the label and the partition:
-	
-	sudo parted /dev/sdb (or sdc ... d, nvme1 ... 2)
-	mklabel gpt
-	mkpart "" ext4 2M 250G (change end size of your disk, like 500G, 1000G)
-	quit
-		
-Format and get the UUID:
-
-	sudo mkfs.ext4 /dev/sdb1
-	'...'
-	'Filesystem UUID: 3b5f8d12-bc30-4358-9739-b6dc8ae251ff'
-	'...'
-	
-Create the path where you want to mount:
-
-	mkdir /data
-		
-Then manual edit fstab:
-		
-	sudo vim /etc/fstab
-		
-Add generated UUID, path and the format (ext4 in this case):
-
-	# /dev/sdb1
-	UUID=3b5f8d12-bc30-4358-9739-b6dc8ae251ff	/data		ext4		rw,relatime	0 0
-		
-Reboot before check:
-
-	sudo blkid (to check the uuid's)
-	sudo fdisk --list
-	ls -la /data
-
-#### Speed/performance check
-
-Check if speed is ok with specifications:
-
-	sudo hdparm -t /dev/sda
-	.................../sdb
-			
-#### Check free space on a device
-
-	df
-	df -H --output=size,used,avail	
-		
-#### Check the space used of any directory
-
-	du -h --max-depth=1 .cache
-	du -h --max-depth=1 .cache/epiphany
-	sudo du -h --max-depth=1 /
-		
-#### Check trim support
-
-Probably your solid state drive have it:
-
-	sudo hdparm -I /dev/sda | grep TRIM
-	sudo hdparm -I /dev/sdb | grep TRIM
-		
-DISC-GRAN (discard granularity) and DISC-MAX (discard max bytes) non-zero values indicate TRIM support:
-		
-	lsblk --discard
-			
-Check and enable trim auto service. Continuous trim is not recommended by UNIX community. Distros like Ubuntu come with trim scheduled to run once a week. Arch does not. Even so, let's check first:
-
-	systemctl cat fstrim.service
-	systemctl status fstrim.timer
-			
-Probably the result above of timer is 'Active: inactive (dead)', so:
-
-	sudo systemctl enable fstrim.timer
-		
-**Reboot** before check. You should read *Active: active (waiting)*:
-
-	systemctl status fstrim.timer
-		
-#### Perform a manual trim 
-
-You can do it after some big change and not wait the weekly	trim runs. The command runs once on all supported mounted filesystems:
-
-	sudo fstrim --verbose --all
-		
-#### About firmware updates on Archlinux 
-
-Updating SAMSUNG SSD firmware on arch linux natively or AUR:
-
-	https://wiki.archlinux.org/index.php/Solid_state_drive#Samsung
-		
-Firmware update of another brands on linux:
-
-	https://wiki.archlinux.org/index.php/Solid_state_drive#Firmware
-			
-TODO NVM-Express user space tooling for Linux:
-
-	pacman -S nvme-cli
-
-### Dark Gnome customization
-
-#### First steps
-
-First step on *bmenu*. On terminal do:
-
-	bmenu				
-	7 System & Setting > Appearance
-	now select dark themes
-		
-Open *Tweaks* on Accessories/Tweaks/Appearance:
-
-	Applications: Matcha-dark-sea
-	Cursor: Xcursor-breeze
-	Icons: Papirus-Dark-Maia
-	Shell: Matcha-dark-sea
-
-Open Accessories/Tweaks/Keyboard & Mouse:
-
-	disable middle click paste
-	disable mouse click emulation
-
-Open Accessories/Kvantum Manager/Change/Delete Theme and choose *Matchama-Dark-Aliz*.
-
-#### More darkness
-
-On terminal:
-
-	vim .config/gtk-2.0/gtkfilechooser.ini
-	'ShowHidden=true'
-
-	vim .config/gtk-3.0/settings.ini
-	'gtk-application-prefer-dark-theme=1'
-
-	vim .config/gtk-4.0/settings.ini
-	'gtk-application-prefer-dark-theme=1'
-		
-#### Settings:
-
-Wifi: config your wireless and them, if using desktop cable, disable it.
-
-Sound: check your output and your microphone
-
-Power: Blank Screen=Never / Automatic Suspend=Off / Power Button Action = Power Off
-
-Displays/Night Light: manual set 17h00 to 8h00
-
-Mouse & Touchpad/Mouse: enable natural scrolling
-		
-Now, reboot your system.
-		
-### Stress tests
-
-Let's do a basic stress and stability test. Observe for some minutes the cpu and gpu temps:
-
-	CPU 80C is acceptable
-	GPU depends a lot, but if it is below 90 is acceptable
-
-Open psensor and use it to monitor:
-
-	psensor
-			
-Start it and observe temperatures and stability during some minutes:
-
-	glxgears_pixmap
-			
-*hint: open some another app like a internet tab during the test to feel the response of your's processors.*
-
-Memory test. Use the amount of RAM you have on your machine in megabyte (24GB example below) and the second arg is the number of passes that you should:
-
-	sudo pacman -S memtester
-	memtester 23420 3
-			
-More advanced stress test for linux (free) https://benchmark.unigine.com/superposition:
+#### Gaming
 
 	pacaur -S unigine-superposition
+	pacaur -S unigine-heaven
 
-### Kernel 
-		
-Optional, there is some readings about Kernel.
-		
-All boot params (official docs): https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
+### Final check list
 
-#### Modules
+	[mantain arch] bmenu (1 Package manager UI>2 Maintain System)
+	[clean cache] sudo pacman -Sc
+	[clean cache] sudo pacaur -Sc
+	[manual trim] sudo fstrim --verbose --all
+	[nvidia power] watch -t nvidia-smi
+	[motherboard] watch -t sensors
+	[CPU power] sudo powertop
+	[ram memory] free
+	[swap check] less /proc/meminfo | grep Swap
+	[directory space] du -h --max-depth=1 .cache/epiphany 
+	[directory space] sudo du -h --max-depth=1 /
+	[device speed] sudo hdparm -t /dev/sda 
+	[device space] df -H 
+	[gpu rendering] glxinfo | grep 'direct rendering'
 
-You could have more than one kernel versions (modules) on:
+### Change Kernel 
 
-	ls /usr/lib/modules
+All kernel boot params (official docs): https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
+
+	[list kernels] ls /usr/lib/modules
+	[active kernel] echo $(uname -r)
 	
-**Shell script** hint to look on the active one only '$(uname -r)':
+Change default kernel example:
 
-	ls /usr/lib/modules/$(uname -r)/kernel
+	sudo vim /boot/loader/loader.conf 
+	"default manjarolinux5.9"
 	
-#### Change your Kernel
-
-TODO (not tested yet). If you install another linux kernel and need to change it on boot, look at boot files to change it:
+Kernel params read and edit example:
 
 	cat /boot/loader/entries/manjarolinux5.9.conf
-	cat /boot/loader/loader.conf 
-
-#### Kernel location
-
-Some Kernel files and locations ('.ko' files).
-
-CPU (architectures):
-
-	ls /usr/lib/modules/$(uname -r)/kernel/arch/x86/events/intel
-		
-Drivers:
-
-	ls /usr/lib/modules/$(uname -r)/kernel/drivers/cpuidle
-	ls /usr/lib/modules/$(uname -r)/kernel/drivers/cpufreq/
-	ls /usr/lib/modules/$(uname -r)/kernel/drivers/thermal/intel
-	ls /usr/lib/modules/$(uname -r)/kernel/drivers/bluetooth
-	ls /usr/lib/modules/$(uname -r)/kernel/drivers/video/backlight
-				
-Filesystems:
-
-	ls /usr/lib/modules/$(uname -r)/kernel/fs/ext4
-		
-Security:
-
-	ls /usr/lib/modules/$(uname -r)/kernel/security/keys/trusted-keys
-	ls /usr/lib/modules/$(uname -r)/kernel/security/keys/encrypted-keys
- 
-Extra modules (not native on kernel, like nvidia GPU):
-
-	ls /usr/lib/modules/$(uname -r)/extramodules
-
-### Credits
-
-**That's all folks**
+	sudo vim /boot/loader/entries/manjarolinux5.9.conf
