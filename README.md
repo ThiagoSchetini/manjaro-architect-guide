@@ -663,7 +663,7 @@ Change default kernel example:
 	sudo vim /boot/loader/loader.conf 
 	"default manjarolinux5.9"
 	
-Kernel params read and edit example:
+Kernel params read and edit on:
 
 	cat /boot/loader/entries/manjarolinux5.9.conf
 	sudo vim /boot/loader/entries/manjarolinux5.9.conf
@@ -679,7 +679,6 @@ You can add the file.ovpn on Settings/Network or using the terminal:
 Use the default gateway if your internet does not work anymore on the VPN host:	
 
 	sudo ip route add default via <default-route>
-	
-Get <default-route> on Settings/Network/Wired-or-WiFi/settings/Details/Defaul Route
-
 	ex: sudo ip route add default via 192.168.15.1
+	
+Get your Default Rout on *Settings/Network/Wired-or-WiFi/settings/Details/Default Route*
