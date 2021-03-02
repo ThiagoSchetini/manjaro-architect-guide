@@ -225,6 +225,7 @@ Test activity on your git, and check if everything is ok, example:
 	sudo pacman -S lrzip (more powerfull, read the man)
 	sudo pacman -S etcher (ISO's pen drive burner)
 	sudo pacman -S transmission-gtk (torrents)
+	sudo pacman -S qopenvpn (VPN)
 	
 ## System Improvement
 
@@ -666,3 +667,19 @@ Kernel params read and edit example:
 
 	cat /boot/loader/entries/manjarolinux5.9.conf
 	sudo vim /boot/loader/entries/manjarolinux5.9.conf
+	
+## VPN native Arch client
+
+You can add the file.ovpn on Settings/Network or using the terminal:
+
+	sudo nmcli connection import type openvpn file /path/to/your.ovpn
+	nmcli connection up <connection-name>
+	nmcli connection show
+	
+Use the default gateway if your internet does not work anymore on the VPN host:	
+
+	sudo ip route add default via <default-route>
+	
+Get <default-route> on Settings/Network/Wired-or-WiFi/settings/Details/Defaul Route
+
+	ex: sudo ip route add default via 192.168.15.1
