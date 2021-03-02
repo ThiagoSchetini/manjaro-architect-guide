@@ -681,4 +681,4 @@ Use the default gateway if your internet does not work anymore on the VPN host:
 	sudo ip route add default via <default-route>
 	ex: sudo ip route add default via 192.168.15.1
 	
-Get your Default Rout on *Settings/Network/Wired-or-WiFi/settings/Details/Default Route*
+Get your Default Route on *Settings/Network/Wired-or-WiFi/settings/Details/Default Route*
