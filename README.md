@@ -200,8 +200,7 @@ Test activity on your git, and check if everything is ok, example:
 	sudo pacman -Rs manjaro-hello manjaro-application-utility
 	sudo pacman -Rs yay 
 	sudo pacman -Rs nano
-	sudo pacman -Rs vi (ensure you installed the vim part, because pacaur will need it)
-	sudo pacman -Rs epiphany
+	sudo pacman -Rs vi (ensure you installed Vim, because pacaur will need it)
 	sudo pacman -Rs pamac-gtk pamac-gnome-integration gnome-layout-switcher
 	
 ### Check/Install Utilities packages that we are gonna use (probably some are pre-installed):
@@ -629,12 +628,7 @@ Sign the key and install:
 	curl -sS https://download.spotify.com/debian/pubkey.gpg | gpg --import -
 	pacaur -S spotify
 
-### Gaming
-
-	pacaur -S unigine-superposition
-	pacaur -S unigine-heaven
-
-## Final check list
+## Final Install/Maintenance check list
 
 	[mantain arch] bmenu (1 Package manager UI>2 Maintain System)
 	[clean cache] sudo pacman -Sc
@@ -668,7 +662,7 @@ Kernel params read and edit on:
 	cat /boot/loader/entries/manjarolinux5.9.conf
 	sudo vim /boot/loader/entries/manjarolinux5.9.conf
 	
-## VPN native Arch client
+## VPN Arch Client
 
 You can add the file.ovpn on Settings/Network or using the terminal:
 
@@ -682,3 +676,45 @@ Use the default gateway if your internet does not work anymore on the VPN host:
 	ex: sudo ip route add default via 192.168.15.1
 	
 Get your Default Route on *Settings/Network/Wired-or-WiFi/settings/Details/Default Route*
+
+There is another great alternative, out of the box for *Arch*:
+
+	https://client.pritunl.com/#install
+
+## Unity
+
+Use UnitHub to download and manage Unity versions and dependencies:
+
+	pacaur -S unityhub
+
+	Activate your licence. Open UnitHub, folow the instructions.
+
+	Download a version of Unity and compilers on *Installs/ADD*.
+
+Manual last stable release on pacaur **recommended using unityhub**:
+
+	pacaur -S unity-editor-lts
+	pacaur -S unity-editor-lts-doc
+
+	unity-editor-lts --register unityhub
+	unity-editor-lts --register visual-studio-code-bin
+	unity-editor-lts --register unity-editor-lts-doc
+
+	*aditional compilers*
+	pacaur -S unity-editor-lts-windows
+	pacaur -S unity-editor-lts-android
+	pacaur -S unity-editor-lts-ios
+	pacaur -S unity-editor-lts-mac
+	pacaur -S unity-editor-lts-webgl
+	
+	unity-editor-lts --register unity-editor-lts-windows
+	unity-editor-lts --register unity-editor-lts-android
+	unity-editor-lts --register unity-editor-lts-ios
+	unity-editor-lts --register unity-editor-lts-mac
+	unity-editor-lts --register unity-editor-lts-webgl
+
+## Games
+	 
+	pacaur -S unigine-superposition
+	pacaur -S unigine-heaven
+	pacaur -S minecraft-launcher
